@@ -47,24 +47,15 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            package: ${{fromJson(needs.job1.outputs.packages)}}
+            packages: ${{fromJson(needs.job1.outputs.packages)}}
 
     steps:
-      - name: Test
-        id: test
-        run: |
-          echo ${{ matrix.package.package }}
-          echo ${{ matrix.package.bump_to }}
-      # - name: create PR ${{ matrix.package }}
-      #   id: test
-      #   run: |
-      #     echo ${{needs.job1.outputs.packages}}
-      #     echo ${{ matrix.package }}
+      - name: Create an Issue
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          title: Must Bump Package => ${{ matrix.packages.package }}
+          body: |
+            Package to bump ${{ matrix.packages.package }} to version ${{ matrix.packages.bump_to }}
 
-      # - name: Create an issue
-      #   uses: actions-ecosystem/action-create-issue@v1
-      #   with:
-      #     github_token: ${{ secrets.github_token }}
-      #     title: ${{ matrix.package }}
-      #     body: |
-      #       Must bump ${{ matrix.package }}
+            Done by Github Actions.
