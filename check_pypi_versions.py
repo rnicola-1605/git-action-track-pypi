@@ -33,16 +33,16 @@ def get_versions(
         latest_version = versions[-1]
 
         if not check_for_days_stability:
-            parse_version(latest_version)
+            return parse_version(latest_version)
 
         try:
             dt_release = datetime.fromisoformat(
                 data["releases"][package_version_now][-1]["upload_time"])
         except IndexError:
-            return parse_version(versions[-1])
+            return parse_version(latest_version)
 
         dt_release_new = datetime.fromisoformat(
-            data["releases"][versions[-1]][-1]["upload_time"])
+            data["releases"][latest_version][-1]["upload_time"])
 
         _diff_dates = (dt_release_new - dt_release)
         _diff_days = int(divmod(_diff_dates.total_seconds(), 86400)[0])

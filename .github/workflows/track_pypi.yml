@@ -7,11 +7,8 @@ on:
 #   schedule:
 #     - cron: '0 9 * * MON' # Every monday
 
-env:
-  IMAGE_NAME: git-packages-test
-
 jobs:
-  job1:
+  check_pypi_versions:
     name: Check Pypi Packages Latest Releases
     runs-on: ubuntu-latest
 
@@ -21,13 +18,13 @@ jobs:
     steps:
       - name: checkout repo content
         id: checkout
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+        uses: actions/checkout@v2
 
       - name: setup python
         id: setup-py
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7.7' # install the python version needed
+          python-version: '3.7.7'
 
       - name: install python packages
         run: |
@@ -41,17 +38,17 @@ jobs:
           echo "::set-output name=packages::$output"
 
 
-  job2:
-    name: "Create PR to Bump Package"
+  github_actions:
+    name: "Create Issue to Bump Package"
     runs-on: ubuntu-latest
 
-    needs: job1
+    needs: check_pypi_versions
 
 
     strategy:
         fail-fast: false
         matrix:
-            packages: ${{fromJson(needs.job1.outputs.packages)}}
+            packages: ${{fromJson(needs.check_pypi_versions.outputs.packages)}}
 
     steps:
       - name: Create an Issue
