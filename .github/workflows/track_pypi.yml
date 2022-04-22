@@ -50,16 +50,21 @@ jobs:
             package: ${{fromJson(needs.job1.outputs.packages)}}
 
     steps:
-      - name: create PR ${{ matrix.package }}
+      - name: Test
         id: test
         run: |
-          echo ${{needs.job1.outputs.packages}}
-          echo ${{ matrix.package }}
+          echo ${{ matrix.package.package }}
+          echo ${{ matrix.package.bump_to }}
+      # - name: create PR ${{ matrix.package }}
+      #   id: test
+      #   run: |
+      #     echo ${{needs.job1.outputs.packages}}
+      #     echo ${{ matrix.package }}
 
-      - name: Create an issue
-        uses: actions-ecosystem/action-create-issue@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          title: ${{ matrix.package }}
-          body: |
-            Must bump ${{ matrix.package }}
+      # - name: Create an issue
+      #   uses: actions-ecosystem/action-create-issue@v1
+      #   with:
+      #     github_token: ${{ secrets.github_token }}
+      #     title: ${{ matrix.package }}
+      #     body: |
+      #       Must bump ${{ matrix.package }}

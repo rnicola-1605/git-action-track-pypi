@@ -39,7 +39,10 @@ with open('requirements.txt', 'r') as requirements:
         if isinstance(version, (str, bytes)):
             latest_release = get_versions(pkg, True)
             if parse_version(version) < latest_release:
-                pkgs_to_bump.append({pkg: str(latest_release)})
+                pkgs_to_bump.append({
+                    "package": pkg,
+                    "bump_to": str(latest_release)
+                })
             else:
                 pkgs_ok.append(pkg)
 
