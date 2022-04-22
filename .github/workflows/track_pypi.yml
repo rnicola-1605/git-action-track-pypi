@@ -45,7 +45,9 @@ jobs:
     steps:
       - name: create PR
         id: test
-        run: echo ${{needs.job1.outputs.packages}}
+        run: |
+          echo ${{needs.job1.outputs.packages}}
+          echo ${{needs.job1.steps.script-pypi.outputs.stdout}}
 
       - name: Create an issue
         uses: actions-ecosystem/action-create-issue@v1
