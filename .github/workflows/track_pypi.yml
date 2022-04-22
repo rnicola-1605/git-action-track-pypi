@@ -3,6 +3,10 @@ name: Track releases from Pypi
 on:
   push:
 
+# on:
+#   schedule:
+#     - cron: '0 9 * * MON' # Every monday
+
 env:
   IMAGE_NAME: git-packages-test
 
