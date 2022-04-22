@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      script: ${{ steps.script-pypi.outputs }}
+      packages: ${{ steps.script-pypi.outputs.packages }}
 
     steps:
       - name: checkout repo content
@@ -32,7 +32,9 @@ jobs:
 
       - name: execute py script
         id: script-pypi
-        run: python check_pypi_versions.py
+        run: |
+          output=$(python check_pypi_versions.py)
+          echo "::set-output name=packages::$output"
 
 
   job2:
@@ -43,7 +45,7 @@ jobs:
     steps:
       - name: create PR
         id: test
-        run: echo ${{needs.job1.outputs.script}}
+        run: echo ${{needs.job1.outputs.packages}}
 
       - name: Create an issue
         uses: actions-ecosystem/action-create-issue@v1
