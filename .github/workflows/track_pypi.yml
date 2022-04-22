@@ -11,6 +11,9 @@ jobs:
     name: Check Pypi Packages Latetest Releases
     runs-on: ubuntu-latest
 
+    outputs:
+      script: ${{ steps.script-pypi.outputs }}
+
     steps:
       - name: checkout repo content
         id: checkout
@@ -40,4 +43,15 @@ jobs:
     steps:
       - name: create PR
         id: test
-        run: echo ${{needs.job1.script-pypi.outputs}}
+        run: echo ${{needs.job1.outputs.script}}
+
+      - name: Create an issue
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          title: Teste
+          body: |
+            ## This week's TODO
+
+            - [ ] Have a meeting with UX team
+            - [ ] Check the dashboard
