@@ -8,7 +8,7 @@ env:
 
 jobs:
   job1:
-    name: Check Pypi Packages Latetest Releases
+    name: Check Pypi Packages Latest Releases
     runs-on: ubuntu-latest
 
     outputs:
@@ -42,20 +42,24 @@ jobs:
     runs-on: ubuntu-latest
 
     needs: job1
+
+
+    strategy:
+        fail-fast: false
+        matrix:
+            package: ${{fromJson(needs.job1.outputs.packages)}}
+
     steps:
-      - name: create PR
+      - name: create PR ${{ matrix.package }}
         id: test
         run: |
           echo ${{needs.job1.outputs.packages}}
-          echo ${{needs.job1.steps.script-pypi.outputs.stdout}}
+          echo ${{ matrix.package }}
 
       - name: Create an issue
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.github_token }}
-          title: Teste
+          title: ${{ matrix.package }}
           body: |
-            ## This week's TODO
-
-            - [ ] Have a meeting with UX team
-            - [ ] Check the dashboard
+            Must bump ${{ matrix.package }}
