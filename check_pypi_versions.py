@@ -43,5 +43,4 @@ with open('requirements.txt', 'r') as requirements:
             else:
                 pkgs_ok.append(pkg)
 
-# print(json.dumps(pkgs_to_bump))
-json.dumps(pkgs_to_bump)
+print(json.dumps(pkgs_to_bump))
