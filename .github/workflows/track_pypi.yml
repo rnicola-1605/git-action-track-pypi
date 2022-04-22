@@ -1,0 +1,38 @@
+name: Track releases from Pypi
+
+on:
+  push:
+
+env:
+  IMAGE_NAME: git-packages-test
+
+jobs:
+  job1:
+    name: Check Pypi Packages Latetest Releases
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo content
+        id: checkout
+        uses: actions/checkout@v2 # checkout the repository content to github runner
+
+      - name: setup python
+        id: setup-py
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7.7' # install the python version needed
+
+      - name: execute py script
+        id: script-pypi
+        run: python check_pypi_versions.py
+
+
+  job2:
+    name: "Create PR to Bump Package"
+    runs-on: ubuntu-latest
+
+    needs: job1
+    steps:
+      - name: create PR
+        id: test
+        run: echo ${{needs.job1.script-pypi.outputs}}
